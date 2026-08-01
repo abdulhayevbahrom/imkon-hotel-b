@@ -1,9 +1,9 @@
 const { Server } = require("socket.io");
+const { corsOptions } = require("../config/cors");
+
 const io = (server) => {
   return new Server(server, {
-    cors: { origin: "*" },
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    credentials: true,
+    cors: corsOptions,
   });
 };
 
