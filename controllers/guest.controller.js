@@ -827,6 +827,17 @@ const updateGuest = async (req, res) => {
     }
 
     const updates = { ...req.body };
+
+    if (
+      Object.prototype.hasOwnProperty.call(updates, "room") &&
+      guest.status !== "active"
+    ) {
+      return response.error(
+        res,
+        "Xonani faqat aktiv mijoz uchun almashtirish mumkin",
+      );
+    }
+
     const todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
     let nextBookedForAt = guest.bookedForAt;
@@ -862,15 +873,13 @@ const updateGuest = async (req, res) => {
         );
       }
 
-      if (guest.status !== "booked") {
-        const targetActiveCount = await Guest.countDocuments({
-          room: targetRoom._id,
-          status: "active",
-          _id: { $ne: guest._id },
-        });
-        if (targetActiveCount >= Number(targetRoom.capacity || 0)) {
-          return response.error(res, "Xonada bo'sh joy yo'q");
-        }
+      const targetActiveCount = await Guest.countDocuments({
+        room: targetRoom._id,
+        status: "active",
+        _id: { $ne: guest._id },
+      });
+      if (targetActiveCount >= Number(targetRoom.capacity || 0)) {
+        return response.error(res, "Xonada bo'sh joy yo'q");
       }
     }
 

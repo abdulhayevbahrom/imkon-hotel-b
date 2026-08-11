@@ -66,6 +66,7 @@ const updateGuestSchema = {
     birthDate: { type: "string", minLength: 1 },
     phone: { type: "string" },
     guestType: { type: "string", enum: ["uzb", "chetellik"] },
+    room: { type: "string", pattern: "^[0-9a-fA-F]{24}$" },
     isBlacklisted: { type: "boolean" },
     vip: { type: "boolean" },
     dailyRate: { type: "number", minimum: 0 },
